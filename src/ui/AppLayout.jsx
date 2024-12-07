@@ -5,9 +5,9 @@ import SideBar from "./SideBar";
 export default function AppLayout() {
     return (
         <>
-        <Header/>
-        <SideBar/>
-        <Outlet/>
+          <Header/>
+          <SideBar/>
+          <Outlet/>
         </>
     )
 }

@@ -28,12 +28,14 @@ async function Login(email, password) {
         credentials: "include"
     });
 
-    const message = await res.json();
     if (!res.ok) {
-        throw new Error(message);
+        const err = await res.json();
+        console.log(err);
+        throw err;
     }
 
-    return message;
+    const message = await res.json();
+    return message.message;
 }
 
 async function SignUp(username, email, password) {
@@ -51,7 +53,7 @@ async function SignUp(username, email, password) {
 
     const message = await res.json();
     if (!res.ok) {
-        throw new Error(message.message);
+        throw message;
     }
 
     return message;
@@ -69,32 +71,30 @@ export function useGetUser() {
 export function useLogin() {
     const queryClient = useQueryClient();
 
-    const {mutate: createLogin, isLoading: isLoggingIn} = useMutation({
+    const {mutateAsync: createLogin, isLoading: isLoggingIn, isError, error} = useMutation({
         mutationFn: async ({email, password}) => {
             return await Login(email, password);
         },
         onSuccess: (message) => {
             console.log(message);
             //queryClient.invalidateQueries('user');
-        },
-        onError: (err) => console.log(err)
+        }
     });
 
-    return {createLogin, isLoggingIn};
+    return {createLogin, isLoggingIn, isError, error};
 }
 
 export function useSignUp() {
     const queryClient = useQueryClient();
 
-    const {mutate: createSignUp, isLoading: isSigningUp} = useMutation({
+    const {mutateAsync: createSignUp, isLoading: isSigningUp, isError, error} = useMutation({
         mutationFn: async ({username, email, password}) => {
             return await SignUp(username, email, password);
         },
         onSuccess: (message) => {
             console.log(message);
         },
-        onError: (err) => console.log(err)
     });
 
-    return {createSignUp, isSigningUp};
+    return {createSignUp, isSigningUp, isError, error};
 }

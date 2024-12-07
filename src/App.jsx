@@ -10,7 +10,8 @@ import ProtectedRoute from "./features/Auth/ProtectedRoute";
 const queryClient = new QueryClient({
   defaultOptions : {
     queries : {
-      staleTime : 0
+      staleTime : 0,
+      retry: false
     }
   }
 });

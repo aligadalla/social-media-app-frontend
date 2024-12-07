@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export default function SignUp() {
     const [hidden, setHidden] = useState(true);
     const navigate = useNavigate();
-    const { createSignUp, isSigningUp } = useSignUp();
+    const { createSignUp, isSigningUp, isError, error } = useSignUp();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const passwordType = hidden ? "password" : "text";
@@ -16,7 +16,7 @@ export default function SignUp() {
             await createSignUp(data);
             navigate('/login');
         } catch(err) {
-            throw new Error(err);
+            console.log(err.message, err.data);
         }
     };
 
@@ -67,6 +67,8 @@ export default function SignUp() {
                     {isSigningUp ? 'Signing up...' : 'Sign Up'}
                 </button>
             </form>
+
+            {isError && <p>{error.message} {error.data}</p>}
         </div>
     );
 }

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const [hidden, setHidden] = useState(true);
     const navigate = useNavigate();
-    const { createLogin, isLoggingIn } = useLogin();
+    const { createLogin, isLoggingIn, isError, error } = useLogin();
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const passwordType = hidden ? "password" : "text";
@@ -18,7 +18,7 @@ export default function Login() {
             navigate('/feed');
         }
         catch(err) {
-            throw new Error(err);
+            console.log(err.message, err.data);
         }
     };
 
@@ -68,6 +68,8 @@ export default function Login() {
                     SignUp
                 </button>
             </div>
+
+            {isError && <p>{error.message} {error.data}</p>}
         </div>
     );
 }
