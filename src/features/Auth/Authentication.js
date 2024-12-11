@@ -38,6 +38,16 @@ async function Login(email, password) {
     return message.message;
 }
 
+async function Logout() {
+    const res = await fetch('http://localhost:3000/auth/logout', {
+        method: "POST",
+        credentials: "include"
+    });
+
+    const message = await res.json();
+    return message;
+}
+
 async function SignUp(username, email, password) {
     const res = await fetch('http://localhost:3000/auth/signup', {
         method: "POST",
@@ -97,4 +107,21 @@ export function useSignUp() {
     });
 
     return {createSignUp, isSigningUp, isError, error};
+}
+
+export function useLogout() {
+    const queryClient = useQueryClient();
+
+    const {mutateAsync: createLogout, isError, error} = useMutation({
+        mutationFn: async () => {
+            return await Logout();
+        },
+        onSuccess: (message) => {
+            console.log(message);
+            queryClient.invalidateQueries('user');
+        },
+        onError: (err) => console.log("errrrr", err)
+    });
+
+    return {createLogout, isError, error};
 }
