@@ -9,12 +9,12 @@ import FeedData from "./features/Feed/FeedData";
 import ProtectedRoute from "./features/Auth/ProtectedRoute";
 
 const queryClient = new QueryClient({
-  defaultOptions : {
-    queries : {
-      staleTime : 60*1000,
-      retry: false
-    }
-  }
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+      // retry: false
+    },
+  },
 });
 
 function App() {
@@ -23,21 +23,24 @@ function App() {
       <ReactQueryDevtools initialIsOpen={false} />
 
       <BrowserRouter>
-      <Routes>
-        <Route index element = {<Navigate replace to="login"/>}/>
-        <Route path="login" element={<Login/>}/>
-        <Route path="signup" element={<SignUp/>}/>
-        <Route element={<AppLayout/>}>
-          <Route path="feed" element={
-            <ProtectedRoute>
-              <FeedData/>
-            </ProtectedRoute>
-          }/>
-        </Route>
-      </Routes>
+        <Routes>
+          <Route index element={<Navigate replace to="login" />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route element={<AppLayout />}>
+            <Route
+              path="feed"
+              element={
+                <ProtectedRoute>
+                  <FeedData />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

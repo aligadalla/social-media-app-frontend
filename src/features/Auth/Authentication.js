@@ -2,11 +2,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 async function CheckUser() {
+  
   const res = await fetch("http://localhost:3000/auth/login", {
     method: "GET",
     credentials: "include",
   });
-  // console.log('res', res);
   if (!res.ok) {
     throw new Error("Login to access this page");
   }
