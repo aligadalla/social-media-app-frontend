@@ -7,6 +7,7 @@ import Login from "./features/Auth/Login";
 import SignUp from "./features/Auth/SignUp";
 import FeedData from "./features/Feed/FeedData";
 import ProtectedRoute from "./features/Auth/ProtectedRoute";
+import Profile from "./features/Profile/Profile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <FeedData />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="profile/:userName"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

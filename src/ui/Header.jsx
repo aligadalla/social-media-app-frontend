@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetUser, useLogout } from "../features/Auth/Authentication";
 
 function Header() {
@@ -13,7 +13,7 @@ function Header() {
 
   return (
     <div>
-      user data : {data?.username}
+      user data : <Link to={`/profile/${data?.username}`}> {data?.username} </Link>
       <button type="button" onClick={handleLogout}>
         Logout
       </button>

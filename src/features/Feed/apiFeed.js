@@ -117,3 +117,35 @@ export function useGetComments(postId) {
 
   return { data, error, isLoading }; // Return the query results
 }
+
+async function deletePost(postId){
+  const res = await fetch(`http://localhost:3000/feed/post/${postId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch comments");
+  }
+
+  const data = await res.json();
+  return data;
+}
+
+export function useDeletePost(){
+  const queryClient = useQueryClient();
+  const { mutateAsync, error } = useMutation({
+    mutationFn: async (postId) => {
+      return await deletePost(postId);
+    },
+    onSuccess: (message) => {
+      console.log("post deleted", message);
+      queryClient.invalidateQueries("feed");
+    },
+    onError: (err) => {
+      console.log("unlike error", err);
+    },
+  });
+
+  return { mutateAsync, error };
+}
