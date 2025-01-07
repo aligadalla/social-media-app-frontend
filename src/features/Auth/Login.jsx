@@ -32,10 +32,10 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="bg-secondary">
+      <h2 className="text-xl">Login</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className="">
           <label htmlFor="email">Email:</label>
           <input
             id="email"
