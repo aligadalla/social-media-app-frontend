@@ -10,6 +10,10 @@ export default {
         primary: '#1B1B2F',
         secondary: '#D6D6D6',
       },
+      fontFamily:{
+        heading: ['poppins', 'serif'], // For headings
+        body: ['sono', 'sans-serif'], // For body text
+      }
     },
   },
   plugins: [],

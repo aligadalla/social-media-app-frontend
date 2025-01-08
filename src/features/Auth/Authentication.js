@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 async function CheckUser() {
@@ -12,7 +11,7 @@ async function CheckUser() {
   }
 
   const data = await res.json();
-  console.log("checkuser data", data);
+  // console.log("checkuser data", data);
   return data;
 }
 
@@ -75,7 +74,7 @@ export function useGetUser() {
     queryKey: ["user"],
     queryFn: CheckUser,
   });
-  console.log("usegetuser data", data);
+  // console.log("usegetuser data", data);
   return { data, isLoading, isError, error };
 }
 
