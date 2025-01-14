@@ -1,46 +1,27 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { useQueryClient } from "@tanstack/react-query";
 import { useGetUser } from "../Auth/Authentication";
-import { useGetProfilePosts,getProfilePicture } from "./apiProfile";
+import { useGetProfileData } from "./apiProfile";
 import Post from "../Feed/Post";
 
 
 function Profile() {
   const [ image, setImage ] = useState(null);
-  const [imgUrl , setImgUrl] = useState('');
+
+  
   const { data: user } = useGetUser();
-  const params = useParams();
-  const { data } = useGetProfilePosts(params.userName);
-  const curProfileUser=params.userName;
-  // const {data:img} = getProfilePicture(params.userName);
-
+  const { userId : profileUserId } = useParams();
+  const queryClient = useQueryClient();
+  const { data } = useGetProfileData(profileUserId);
+  
+  const username = data?.username;
   const posts = data?.posts;
-  // console.log("data from profile", posts);
-  console.log("user Profile", params.userName);
-  console.log("user posts", posts);
-  const me = user.username === params.userName;
+  const imgUrl = data?.profilePicture;
+  const isFollowed = data?.isFollowed;
+  // console.log("user data", data);
+  const me = user.username === username;
 
-  useEffect( function getProfilePicture(){
-    async function fetchProfilePicture(){
-      const res = await fetch(`http://localhost:3000/profile/profilePicture/${params.userName}`, {
-        method: "GET",
-        credentials: "include",
-      });
-    
-      if (!res.ok) {
-        throw new Error("Failed to fetch image");
-      }
-    
-      const data = await res.json();
-      console.log("posts refetched with data",data)
-      return data;
-    }
-    fetchProfilePicture().then((data)=>{
-      console.log("data",data);
-      setImgUrl(data.imgUrl);
-    })
-  },[setImgUrl,params.userName])
 
   async function handleUpload() {
     if (!image) {
@@ -65,25 +46,26 @@ function Profile() {
     console.log("upload data", data);
   }
 
-  async function handleFollow(username){
+  async function handleFollow(id){
     console.log("username",username)
-    const res = await fetch('http://localhost:3000/feed/follow', {
-      method: "POST",
+    const res = await fetch(`http://localhost:3000/feed/${isFollowed ? "unfollow":"follow"}`, {
+      method: `${isFollowed ? "DELETE" : "POST"}`,
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        followingName: username
+        followingId: id
       }),
       credentials: "include",
     });
-
+    console.log('res',res )
     if (!res.ok) {
-      throw new Error("Failed to follow");
+      throw new Error("Failed to follow/unfollow");
     }
 
     const data = await res.json();
+    queryClient.invalidateQueries(["profile",profileUserId])
     console.log("follow data", data);
   }
 
@@ -93,8 +75,8 @@ function Profile() {
       <img className="rounded-full h-" src={`http://localhost:3000/${imgUrl}`} />
       <input type="file" onChange={(e) => setImage(e.target.files[0])} />
       <button onClick={handleUpload}>Upload</button>
-      <p>{params.userName}</p>
-      {me ? <p>edit</p> : <button onClick={()=>handleFollow(params.userName)}>follow</button>}
+      <p>{username}</p>
+      {me ? <p>edit</p> : <button onClick={()=>handleFollow(profileUserId)}>{isFollowed ? "unfollow":"follow"}</button>}
       {posts?.map((post) => (
         <Post key={post.id} post={post} />
       ))}

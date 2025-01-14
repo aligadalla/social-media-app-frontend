@@ -27,7 +27,7 @@ function Post({ post }) {
 
   return (
     <div>
-      <p><Link to={`/profile/${post.username}`}>{post.username}</Link></p>
+      <p><Link to={`/profile/${post.authorId}`}>{post.username}</Link></p>
       <p>{post.likeCount}</p>
       <p>{post.commentCount}</p>
       <p>{post.description}</p>

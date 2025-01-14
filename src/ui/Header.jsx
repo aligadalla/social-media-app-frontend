@@ -13,7 +13,7 @@ function Header() {
 
   return (
     <div>
-      user data : <Link to={`/profile/${data?.username}`}> {data?.username} </Link>
+      user data : <Link to={`/profile/${data?.userId}`}> {data?.username} </Link>
       <button type="button" onClick={handleLogout}>
         Logout
       </button>

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-async function getPosts(username){
-    const res = await fetch(`http://localhost:3000/profile/posts/${username}`, {
+async function getProfileData(profileUserId){
+    const res = await fetch(`http://localhost:3000/profile/posts/${profileUserId}`, {
         method: "GET",
         credentials: "include",
       });
@@ -16,10 +16,10 @@ async function getPosts(username){
       return data;
 }
 
-export function useGetProfilePosts(username){
+export function useGetProfileData(profileUserId){
     const {data,isLoading,error} = useQuery({
-        queryKey: ["profile",username],
-        queryFn: ()=>getPosts(username),
+        queryKey: ["profile",profileUserId],
+        queryFn: ()=>getProfileData(profileUserId),
     })
     console.log("useGetUserCalled")
     return {data,isLoading,error}
