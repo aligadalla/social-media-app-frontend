@@ -8,6 +8,7 @@ import SignUp from "./features/Auth/SignUp";
 import FeedData from "./features/Feed/FeedData";
 import ProtectedRoute from "./features/Auth/ProtectedRoute";
 import Profile from "./features/Profile/Profile";
+import Chat from "./features/Chat/Chat";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,6 +47,7 @@ function App() {
               }
             />
           </Route>
+          <Route path="chat" element={<Chat />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
