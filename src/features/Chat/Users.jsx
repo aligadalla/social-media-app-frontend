@@ -5,9 +5,14 @@ import User from "./User";
 
 function Users({ setSelectedUser }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const { data: users, isLoading, error, isError } = useGetUsers(searchQuery);
+  const {
+    data: { chats } = {},
+    isLoading,
+    error,
+    isError,
+  } = useGetUsers(searchQuery);
 
-  console.log(users);
+//   console.log(users);
 
   return (
     <div>
@@ -18,7 +23,7 @@ function Users({ setSelectedUser }) {
       />
       <div>
         <ul>
-          {users?.map((user) => (
+          {chats?.map((user) => (
             <User key={user.id} user={user} setSelectedUser={setSelectedUser} />
           ))}
         </ul>

@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { useGetMessages } from "./apiChat";
 
-function Chat({ selectedUser }) {
-  const { data: { messages } = {}, isLoading } = useGetMessages(selectedUser);
-
+function Chat({ selectedUser, messages, isLoading }) {
   const [message, setMessage] = useState("");
-
   if (!selectedUser) return <div>no user selected</div>;
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    if(message === "")
+        return;
     const res = await fetch(
       `http://localhost:3000/chat/sendMessage/${selectedUser}`,
       {
@@ -26,12 +23,12 @@ function Chat({ selectedUser }) {
     );
 
     const data = await res.json();
-
+    setMessage("");
     console.log(data);
   }
 
   return (
-    <div>
+    <div className="bg-slate-500">
       {isLoading ? (
         <p>loading...</p>
       ) : (
@@ -40,7 +37,11 @@ function Chat({ selectedUser }) {
             <p key={idx}>{messages.content}</p>
           ))}
           <form onSubmit={(e) => handleSubmit(e)}>
-            <input type="text" onChange={(e) => setMessage(e.target.value)} />
+            <input
+              type="text"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
           </form>
         </>
       )}
@@ -49,4 +50,3 @@ function Chat({ selectedUser }) {
 }
 
 export default Chat;
-
