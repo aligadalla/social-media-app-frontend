@@ -31,5 +31,4 @@ function ChatLayout() {
     </div>
   );
 }
-
 export default ChatLayout;
