@@ -20,7 +20,7 @@ function ChatLayout()
     },[data])
     return (
         <div>
-            <Users />
+            <Users userData={data}/>
             <Chat />
         </div>
     )
