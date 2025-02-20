@@ -46,8 +46,8 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="chat" element={<ChatLayout />} />
           </Route>
-          <Route path="chat" element={<ChatLayout />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

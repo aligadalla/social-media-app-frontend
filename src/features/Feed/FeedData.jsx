@@ -1,16 +1,14 @@
-import {  useGetPosts } from "./apiFeed";
+import { useGetPosts } from "./apiFeed";
 import Post from "./Post";
 
 export default function FeedData() {
-  
-  const { data /*isLoading,error*/ } = useGetPosts();
-  // console.log("posts", data);
+  const { data } = useGetPosts();
   const posts = data?.posts;
-  
+
   return (
-    <div>
+    <div className="space-y-4 p-4">
       {posts?.map((post) => (
-        <Post post={post} key={post.id}/>
+        <Post post={post} key={post.id} />
       ))}
     </div>
   );
