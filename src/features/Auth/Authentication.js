@@ -11,7 +11,7 @@ async function CheckUser() {
   }
 
   const data = await res.json();
-  // console.log("checkuser data", data);
+  console.log("checkuser data", data);
   return data;
 }
 
@@ -73,6 +73,8 @@ export function useGetUser() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["user"],
     queryFn: CheckUser,
+    staleTime: 0, 
+    cacheTime: 0, 
   });
   // console.log("usegetuser data", data);
   return { data, isLoading, isError, error };

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useLikePost, useDeleteLike } from "./apiFeed";
 import { useGetUser } from "../Auth/Authentication";
 import Comments from "./Comments";
+import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa"; // Importing Icons
 
 function Post({ post }) {
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
@@ -39,19 +40,27 @@ function Post({ post }) {
       <p className="text-gray-800 mb-2">{post.description}</p>
 
       {/* Post Actions */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-6 mt-3">
+        {/* Like Button */}
         <button 
           onClick={() => handleLike(post.id, post.isLiked)}
-          className={`text-sm ${post.isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500 transition`}
+          className="flex items-center space-x-1 text-sm font-medium transition"
         >
-          {post.isLiked ? "Unlike" : "Like"} ({post.likeCount})
+          {post.isLiked ? (
+            <FaHeart className="text-red-500 text-lg transition-transform transform scale-110" />
+          ) : (
+            <FaRegHeart className="text-gray-500 text-lg hover:text-red-500 transition" />
+          )}
+          <span className={post.isLiked ? "text-red-500" : "text-gray-500"}>{post.likeCount}</span>
         </button>
 
+        {/* Comment Button */}
         <button 
           onClick={() => setIsCommentsOpen((open) => !open)}
-          className="text-sm text-blue-500 hover:underline"
+          className="flex items-center space-x-1 text-sm text-gray-500 hover:text-blue-500 transition"
         >
-          Comments ({post.commentCount})
+          <FaRegComment className="text-lg" />
+          <span>{post.commentCount}</span>
         </button>
       </div>
 

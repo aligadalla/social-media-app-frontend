@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { FaHome, FaComments } from "react-icons/fa";
 
 export default function SideBar({ isSideBarOpen, setIsSidebarOpen }) {
   return (
@@ -19,23 +20,21 @@ export default function SideBar({ isSideBarOpen, setIsSidebarOpen }) {
       >
         <p className="text-xl font-semibold text-gray-800 mb-4">SideBar</p>
 
-        <nav>
+        <nav className="space-y-2">
           <NavLink
             to="/feed"
             onClick={() => setIsSidebarOpen(false)}
-            className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white rounded transition"
+            className="flex items-center px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white rounded transition"
           >
-            Feed
+            <FaHome className="mr-3" /> Feed
           </NavLink>
-        </nav>
 
-        <nav>
           <NavLink
             to="/chat"
             onClick={() => setIsSidebarOpen(false)}
-            className="block px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white rounded transition"
+            className="flex items-center px-4 py-2 text-gray-800 hover:bg-blue-500 hover:text-white rounded transition"
           >
-            Chat App
+            <FaComments className="mr-3" /> Chat App
           </NavLink>
         </nav>
       </div>

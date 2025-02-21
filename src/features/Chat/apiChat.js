@@ -41,8 +41,8 @@ async function getUsers(searchQuery) {
 
 export function useGetUsers(searchQuery) {
     const {data, isLoading, error, isError} = useQuery({
-        queryKey: ["users"],
-        queryFn: () => getUsers(searchQuery)
+        queryKey: ["users", searchQuery],
+        queryFn: () => getUsers(searchQuery),
     });
 
     return {data, isLoading, error, isError};

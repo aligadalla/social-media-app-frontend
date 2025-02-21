@@ -1,60 +1,69 @@
 import { useEffect, useState } from "react";
 import { useGetUser } from "../Auth/Authentication";
 import openSocket from "socket.io-client";
-import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import Users from "./Users";
 import Chat from "./Chat";
-import { useGetMessages } from "./apiChat";
 
 function ChatLayout() {
   const [selectedUser, setSelectedUser] = useState(null);
   const { data } = useGetUser();
-  //   const { data: { messages } = {}, isLoading } = useGetMessages(selectedUser);
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
-  console.log(messages);
-  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(
-    function () {
-      async function fetchMessages() {
-        setIsLoading(true);
-        const res = await fetch(
-          `http://localhost:3000/chat/getChat/${selectedUser}`,
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
 
-        const data = await res.json();
-        console.log(data);
-        setMessages(data.messages);
-        setIsLoading(false);
-      }
-      if (selectedUser) fetchMessages();
+  useEffect(() => {
+    if (data?.message === "Not Logged In") {
+      navigate("/login", { replace: true });
+    }
+  }, [data, navigate]);
 
-      const socket = openSocket("http://localhost:3000", {
-        query: {
-          userId: data?.userId,
-        },
-      });
+  useEffect(() => {
+    async function fetchMessages() {
+      if (!selectedUser) return;
+      setIsLoading(true);
+      const res = await fetch(
+        `http://localhost:3000/chat/getChat/${selectedUser}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      setMessages(data.messages);
+      setIsLoading(false);
+    }
 
-      socket.on("newMessage", ({ sentMsgObj }) => {
-        setMessages((curMessages) => [...curMessages, sentMsgObj]);
-      });
-    },
-    [data, selectedUser]
-  );
+    fetchMessages();
+  }, [selectedUser]);
+
+  useEffect(() => {
+    if (!data?.userId) return;
+
+    const socket = openSocket("http://localhost:3000", {
+      query: { userId: data?.userId },
+    });
+
+    socket.emit("join", { userId: data.userId });
+
+    socket.on("newMessage", ({ sentMsgObj }) => {
+      setMessages((prevMessages) => [...prevMessages, sentMsgObj]);
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [data]);
+
+  if (data?.message === "Not Logged In") return null;
+
   return (
-    <div>
-      <Users setSelectedUser={setSelectedUser} />
-      <Chat
-        isLoading={isLoading}
-        messages={messages}
-        selectedUser={selectedUser}
-      />
+    <div className="flex h-screen bg-gray-200">
+      <Users setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
+      <Chat isLoading={isLoading} messages={messages} selectedUser={selectedUser} />
     </div>
   );
 }
+
 export default ChatLayout;

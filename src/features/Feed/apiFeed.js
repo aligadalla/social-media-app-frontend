@@ -149,3 +149,21 @@ export function useDeletePost(){
 
   return { mutateAsync, error };
 }
+
+export async function addPost(description) {
+  const res = await fetch("http://localhost:3000/feed/postt", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(description),
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to add post");
+  } 
+
+  const data = await res.json();
+  return data;
+}
